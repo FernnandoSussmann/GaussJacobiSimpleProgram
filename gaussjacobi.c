@@ -7,11 +7,11 @@
 #define PAUSE 0
 #endif
 
-void atribuiValores(float *, float *, float *, float *, float *);
-void printaPorraToda(float *, float *, float *, float *, float, float, float);
-void printaPorraTodaResolucao(float *, float *, float *, float *, float, float, float);
-float gaussJacob(float *, float *, float *, float *, float *, float *, float *);
-float maiorNumero(float *);
+void atribuiValores(float*, float*, float*, float*, float*);
+void printaTudo(float*, float*, float*, float*, float, float, float);
+void printaTudoResolucao(float*, float*, float*, float*, float, float, float);
+float gaussJacob(float*, float*, float*, float*, float*, float*, float*);
+float maiorNumero(float*);
 float modulo(float);
 
 int main(){
@@ -20,33 +20,32 @@ int main(){
    float a[3], b[3], c[3], resultado[3], x1 = 0, x2 = 0, x3 = 0, epsilon, dr;
 
    atribuiValores(a,b,c,resultado, &epsilon);
-
-   printf("\n %f \n", epsilon);
-
-   printaPorraToda(a,b,c,resultado,x1,x2,x3);	
+   printaTudo(a,b,c,resultado,x1,x2,x3);
 
    x1 = resultado[0] / a[0];
    x2 = resultado[1] / b[1];
    x3 = resultado[2] / c[2];
 
    do {
-	printaPorraTodaResolucao(a,b,c,resultado,x1,x2,x3);
+     printaTudoResolucao(a,b,c,resultado,x1,x2,x3);
 
-	dr = gaussJacob(a,b,c,resultado,&x1,&x2,&x3);
+     dr = gaussJacob(a,b,c,resultado,&x1,&x2,&x3);
    }while (dr > epsilon);
-   
+
+   printaTudo(a,b,c,resultado,x1,x2,x3);
 
    if(PAUSE==1)
      system("pause");
    else
      system("read -p \"Pressione enter para sair\" saindo");
-  return(0); 
+
+  return(0);
 }
 
 void atribuiValores(float *a, float *b, float *c, float *resultado, float *epsilon){
    int i;
 
-   printf("Digite o valor de epsilon (mais conhecida como letra romana que seu professor coloca como limite):\n");
+   printf("Digite o valor de epsilon:\n");
    scanf("%f", epsilon);
 
    for(i = 0; i < 3; i++){
@@ -61,11 +60,12 @@ void atribuiValores(float *a, float *b, float *c, float *resultado, float *epsil
 
       printf("Digite o valor do resultado da funcao %d:\n", i + 1);
       scanf("%f", resultado + i);
-  }	
+  }
 }
 
-void printaPorraToda(float *a, float *b, float *c, float *resultado, float x1, float x2, float x3){
+void printaTudo(float *a, float *b, float *c, float *resultado, float x1, float x2, float x3){
    int i;
+
     if (x1 == 0 && x2 == 0 && x3 ==0)
        for(i = 0; i < 3; i++){
          printf("\n%.2fx1 + ", *(a + i));
@@ -75,9 +75,9 @@ void printaPorraToda(float *a, float *b, float *c, float *resultado, float x1, f
          printf("%.2fx3 = ", *(c + i));
 
          printf("%.2f", *(resultado + i));
-      }	
+      }
     else{
-	for(i = 0; i < 3; i++){
+       for(i = 0; i < 3; i++){
          printf("\n%.2f(%.2f) + ", *(a + i), x1);
 
          printf("%.2f(%.2f) + ", *(b + i), x2);
@@ -85,25 +85,24 @@ void printaPorraToda(float *a, float *b, float *c, float *resultado, float x1, f
          printf("%.2f(%.2f) = ", *(c + i), x3);
 
          printf("%.2f", *(resultado + i));
-      }	
+      }
      }
-
 
    printf("\n\n");
 }
 
-void printaPorraTodaResolucao(float *a, float *b, float *c, float *resultado, float x1, float x2, float x3){
+void printaTudoResolucao(float *a, float *b, float *c, float *resultado, float x1, float x2, float x3){
    int i;
 
    printf("x1 = 1/%.2f(%.2f - %.2f(%.2f) - %.2f(%.2f))\n", *a, *resultado, *b, x2, *c, x3);
    printf("x2 = 1/%.2f(%.2f - %.2f(%.2f) - %.2f(%.2f))\n", *(b + 1), *(resultado + 1), *(a + 1), x1, *(c + 1), x3);
-   printf("x3 = 1/%.2f(%.2f - %.2f(%.2f) - %.2f(%.2f))\n", *(c + 2), *(resultado + 2), *(a + 2), x1, *(b + 2), x2);   
+   printf("x3 = 1/%.2f(%.2f - %.2f(%.2f) - %.2f(%.2f))\n", *(c + 2), *(resultado + 2), *(a + 2), x1, *(b + 2), x2);
 
    printf("\n\n");
 }
 
 
-float gaussJacob(float *a, float *b, float *c, float *resultado, float *x1, float *x2, float *x3){
+float gaussJacob(float* a, float* b, float* c, float* resultado, float* x1, float* x2, float* x3){
    int i;
    float xNovo[3], maiorDiferenca, maiorNovo, xDiferenca[3], dr;
 
@@ -120,20 +119,20 @@ float gaussJacob(float *a, float *b, float *c, float *resultado, float *x1, floa
 
 
    for (i = 0; i < 3; i++)
-     printf("\n diferenca de x%d = %.2f \n",i + 1, modulo(xDiferenca[i]));
+     printf("\nDiferenca de x%d = %.2f \n",i + 1, modulo(xDiferenca[i]));
 
    maiorDiferenca = maiorNumero(xDiferenca);
    maiorNovo = maiorNumero(xNovo);
 
    dr = maiorDiferenca/maiorNovo;
 
-   x1 = xNovo;
-   x2 = xNovo + 1;
-   x3 = xNovo + 2;
- 
-   return 0;
+  *x1 = *(xNovo);
+  *x2 = *(xNovo + 1);
+  *x3 = *(xNovo + 2);
 
-   printf("\n\n");
+   printf("\ndr = %f \n\n", dr);
+
+   return dr;
 }
 
 float maiorNumero(float *comparacao){
